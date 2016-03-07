@@ -1,0 +1,33 @@
+<ion-view view-title="{{clubName}}">
+     <!--<ion-nav-buttons side="secondary">
+          <button class="button button-clear" ng-click="login()">
+              <i class="ion-ios-calendar-outline" style="font-size: 38px" ></i>
+          </button>
+     
+    </ion-nav-buttons>-->
+    <div class="bar bar-subheader android-subheader  item-input-inset bar-light">
+		<div class="button-bar">
+			<a class="button button-clear " ng-class="{'button-assertive activeOsn': item.id== CurrentDay , 'button-dark inactiveOsn':item.id!=CurrentDay}"
+			   ng-repeat="item in days" href="" ng-click="refreshClasses(item.id,item.name)">{{item.name}}</a>
+		</div>
+    </div>
+  <ion-content  class="has-header has-subheader">
+    <ion-list>
+         <ion-item ng-repeat='item in classes'
+					  class="item-thumbnail-left item-icon-right item-text-wrap" 
+                      ng-click="getDetails(item)">
+				<img ng-src="http://www.fitnessfirstme.com/{{item.popupHeaderImage}}"
+					 alt="{{item.title}}" class="no-size">
+				<h2>{{item.title}}</h2>
+				<h3>Studio: {{item.studio}}</h3>
+				<h4>{{item.timeText}}</h4>
+				
+
+			</ion-item>
+         
+      <!--<ion-item ng-repeat="club in clubs" href="http://www.fitnessfirstme.com/en-GB/uae/classes/timetable/Clubs/">
+        {{club.name}}-->
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

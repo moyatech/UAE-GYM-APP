@@ -1,0 +1,21 @@
+<ion-popover-view>
+  <ion-header-bar>
+    <h1 class="title">Alarm Settings</h1>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="doLogin()">
+      <div class="list">
+        <ion-list>
+            <ion-radio ng-model="choice" ng-value="'A'">30 Minutes Before</ion-radio>
+            <ion-radio ng-model="choice" ng-value="'B'">1 Hour Before</ion-radio>
+            <ion-radio ng-model="choice" ng-value="'C'">2 Hours Before</ion-radio>
+            <ion-checkbox ng-model="filter.blue">Repeate</ion-checkbox>
+        </ion-list>
+        
+        <label class="item">
+          <button class="button button-block button-positive" type="submit">Create Alaram</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-popover-view>

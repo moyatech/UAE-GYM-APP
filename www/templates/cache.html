@@ -1,0 +1,16 @@
+<ion-view view-title="Cache">
+    <ion-content >
+       
+        <ion-toggle toggle-class="toggle-calm" ng-model="enableCache.value" ng-change="updateCacheSetting()">Enable Cache</ion-toggle>
+        <div class="content padding">
+            
+        <p> By default every club viewed is cached for one day, enable caching will store the data for one week, Refresh cache will clear any current cache and then perform a reload</p>
+        <button class="button button-block button-positive " ng-click="refreshCache()" ng-show="enableCache.value">
+            Refresh Cache
+        </button>
+        <button class="button button-block button-balanced " ng-click="resetCache()" ng-hide="enableCache.value">
+            Reset Cache
+        </button>
+        </div>
+    </ion-content>
+</ion-view>

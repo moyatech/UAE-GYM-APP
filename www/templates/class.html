@@ -1,0 +1,75 @@
+<ion-view view-title="{{ currentClass.title  }}">
+    <ion-content padding="true" class="has-header" delegate-handle="ptr-content">
+        <ion-refresher on-refresh="doRefresh()">
+        </ion-refresher>        
+        
+        <div class="list card">
+            <div class="item ">
+                <h1 style="text-overflow :initial; text-wrap:normal;white-space:normal;">{{ currentClass.title }} </h1>
+                <h2>{{ currentClass.day }} {{ currentClass.timeText }}</h2>
+                <h3>{{ currentClass.clubName }}</h3>
+                <h3>Studio: {{ currentClass.studio }}</h3>
+                <h3>Instructor: {{ currentClass.instructor }}</h3>
+                <img ng-src="{{currentChannel.img}}">
+            </div>
+
+            <div class="item item-body">
+                <img ng-src="http://www.fitnessfirstme.com/{{currentClass.popupHeaderImage}}" style="width:100%" alt="{{ currentClass.title }} ">
+                <p>{{ currentClass.description }}</p>
+                <!--<p ng-show="ProgramDetails.duration">Duration {{ProgramDetails.duration}} Hours</p>-->
+
+
+                <button class="button button-assertive button-clear" ng-click="remindMe($event)">
+                    <i class="icon  icon-left ion-ios-bell-outline"></i>
+                    <span>Reminde me</span>
+                    
+                    <span ng-show="ProgramDetails.hasAlarm">Remove reminder</span>
+
+                </button>
+
+                <!--<nav mfb-menu position="br" effect="zoomin" label="hover here"
+                    active-icon="ion-edit" resting-icon="ion-plus-round"
+                    toggling-method="click">
+                <button mfb-button icon="paper-airplane" label="menu item"></button>
+                </nav>-->
+            </div>
+
+            <div class="item">
+                <div class="row ">
+                    Also Available on :
+                </div>
+                <div class="flex-container wrap">
+                    <div class="col col-25"  ng-repeat="item in times" ng-hide="currentClass.classId === item.classId">
+                        <button class="button button-small button-stable" ng-click="getDetails(item)">
+                          {{item.dayShort}} {{item.timeText}}
+                        </button><span>&nbsp;</span>
+                    </div>
+                </div>
+                <!--<span   ng-repeat="item in times" ng-hide="currentClass.classId === item.classId">
+                      
+                        <a class="button button-stable" ng-click="getDetails(item)" alt="" >
+                         {{item.dayShort}} {{item.timeText}}
+                        </a>
+                      
+        </span>
+                   -->
+            </div>
+            <div class="item tabs   item-divider tabs-icon-left card-footer">
+                <a class="tab-item button-calm button button-clear" href="#" ng-click="twitterShare()">
+                    <i class="icon ion-social-twitter"></i> #fitnessfirst
+                </a>
+                <a class="tab-item button-positive button button-clear" href="#" ng-click="facebookShare()">
+                    <i class="icon ion-social-facebook "></i> Share
+                </a>
+                <a class="tab-item button-balanced button button-clear" href="#" ng-click="whatsappShare()">
+                    <i class="icon ion-social-whatsapp "></i> Share
+                </a>
+
+
+            </div>
+
+        </div>
+
+
+    </ion-content>
+</ion-view>

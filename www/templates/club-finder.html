@@ -1,0 +1,25 @@
+<ion-view view-title="Locations">
+  <ion-content>
+    <ion-list>
+         <div ng-repeat="city in cities">
+         <ion-item class="item-stable"
+                    ng-click="toggleGroup(city.name)"
+                    ng-class="{active: isGroupShown(city.name)}"
+                   >
+              <i class="icon" ng-class="isGroupShown(city.name) ? 'ion-minus' : 'ion-plus'"></i>
+                {{city.name}}
+          </ion-item>
+          <ion-item class="item-accordion"
+                    ng-repeat="item in city.clubs"
+                    
+                    ng-show="isGroupShown(city.name)"
+                     href="#/app/club/{{item.id}}/{{item.name}}">
+            {{item.name}}
+          </ion-item>
+         </div>
+      <!--<ion-item ng-repeat="club in clubs" href="http://www.fitnessfirstme.com/en-GB/uae/classes/timetable/Clubs/">
+        {{club.name}}-->
+      
+    </ion-list>
+  </ion-content>
+</ion-view>

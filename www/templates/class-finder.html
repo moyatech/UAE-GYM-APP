@@ -1,0 +1,48 @@
+<ion-view view-title="Classes">
+     <!--<ion-nav-buttons side="secondary">
+          <button class="button button-clear" ng-click="login()">
+              <i class="ion-ios-calendar-outline" style="font-size: 38px" ></i>
+          </button>
+     
+    </ion-nav-buttons>-->
+    <div class="bar bar-subheader android-subheader  item-input-inset bar-light">
+		<div class="button-bar">
+             <!--ng-class="{'button-assertive activeOsn': item.id== CurrentDay , 'button-dark inactiveOsn':item.id!=CurrentDay}"-->
+			<a class="button button-clear " ng-class="{'button-assertive activeOsn': item.code== currentEmirate.code , 'button-dark inactiveOsn':item.code!=currentEmirate.code}"
+			   ng-repeat="item in emirates" href="" ng-click="refreshClassesByRegion(item)">{{item.code}}</a>
+		</div>
+       
+    </div>
+     <div class="bar bar-subheader android-subheader  item-input-inset bar-light">
+     <div class="button-bar">
+			<a class="button button-clear " ng-class="{'button-assertive activeOsn': item.id== CurrentDay , 'button-dark inactiveOsn':item.id!=CurrentDay}"
+			   ng-repeat="item in days" href="" ng-click="refreshClassesByDay(item.id,item.name)">{{item.name}}</a>
+		</div>
+     </div>
+  <ion-content  class="has-header has-subheader2">
+    <ion-list>
+         
+          <div ng-repeat="group in groupedClasses">
+         <ion-item class="item-stable"
+                    ng-click="toggleGroup(group.name)"
+                    ng-class="{active: isGroupShown(group.name)}"
+                   >
+              <i class="icon" ng-class="isGroupShown(group.name) ? 'ion-minus' : 'ion-plus'"></i>
+                {{group.name}}
+          </ion-item>
+          <ion-item class="item-accordion item-thumbnail-left item-icon-right item-text-wrap"
+                    ng-repeat="item in group.classes"
+                    ng-show="isGroupShown(group.name)"
+                    ng-click="getDetails(item)">
+            <img ng-src="http://www.fitnessfirstme.com/{{item.popupHeaderImage}}"
+					 alt="{{item.title}}" class="no-size">
+				<h2>{{item.clubName}}</h2>
+                <h4>Studio: {{item.studio}}</h4>
+				<h4>{{item.timeText}}</h4>
+          </ion-item>
+         </div>
+    
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
