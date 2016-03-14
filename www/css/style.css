@@ -20,6 +20,15 @@
     display: flex;
 }
 
+
+ .item-alarm-left .item-alarm, .item-alarm-left .item-content .item-alarm {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    max-width: 100px;
+    max-height: 80px;
+}
+
 .wrap    {
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap;

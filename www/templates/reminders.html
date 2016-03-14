@@ -1,0 +1,71 @@
+<ion-view title="Reminders">
+    <!--<ion-header-bar align-title="left" class="bar-positive">
+        <div class="buttons">
+            <button class="button" ng-click="doSomething()">Left Button</button>
+        </div>
+        <h1 class="title">Reminders!</h1>
+        <div class="buttons">
+            <button class="button">Right Button</button>
+        </div>
+    </ion-header-bar>-->
+ 
+    <ion-nav-buttons side="secondary">
+     <button class="button icon ion-ios-trash-outline" ng-click="toggleDelete()"></button>
+    </ion-nav-buttons>
+    <ion-content >
+        
+        <ion-list show-delete="shouldShowDelete">
+            <ion-item ng-repeat="notification in notifications" class="item">
+                <ion-delete-button class="ion-minus-circled"></ion-delete-button>
+                <!--<ion-option-button class="button-assertive">Remove</ion-option-button>-->
+                <h2>{{notification.data.title}}</h2>
+                <!--<h3>{{notification.data.timeText}}</h3>-->
+                <p> {{notification.data.timeText}} </p>
+            </ion-item>
+            <div class="item item-divider">
+                Sunday
+            </div>
+            <ion-item class="item-content">
+                <ion-delete-button class="ion-minus-circled" ng-show="shouldShowDelete"></ion-delete-button>
+                <!--<ion-option-button class="button-assertive">Remove</ion-option-button>-->
+                
+                
+                
+                <div class="row">
+                    <div class="col"> <h1 >08:30</h1></div>
+                    <div class="col col-75">
+                           <h2>Yoga Class </h2>
+                            <p> Some class description ??</p>
+                    </div>
+                    
+                    
+               </div>
+
+            </ion-item>
+             <div class="item item-divider">
+                Friday
+            </div>
+            <ion-item class="item item-icon-right">
+                <ion-delete-button class="ion-minus-circled" ng-show="shouldShowDelete"></ion-delete-button>
+                <!--<ion-option-button class="button-assertive">Remove</ion-option-button>-->
+                
+                
+                
+                <div class="row ">
+                    <div class="col"> <h1 >22:30</h1></div>
+                    <div class="col col-75">
+                           <h2>Yoga Class </h2>
+                            <p> Some class description ??</p>
+                    </div>
+                    
+                   <i class="icon ion-loop"></i>
+                    <!--<span class="item-note">Repeate</span> -->
+               </div>
+               
+
+            </ion-item>
+            
+        </ion-list>
+       
+    </ion-content>
+</ion-view>

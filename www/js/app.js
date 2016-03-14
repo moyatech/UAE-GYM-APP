@@ -85,6 +85,15 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.services','ng
         }
        }
     })
+    .state('app.reminders', {
+      url: '/reminders',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/reminders.html',
+          controller: 'RemindersCtrl'
+        }
+       }
+    })
   .state('app.classFinder', {
       url: '/class-finder',
       views: {

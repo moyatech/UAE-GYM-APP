@@ -2,7 +2,7 @@ angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) { 
 })
-.controller('ClubFinderCtrl', function ($rootScope,$scope, $http, $state,$ionicLoading,$cordovaSQLite,sharingService, $ionicPlatform,localStorage,$cordovaNetwork,$ionicPopup) {
+.controller('ClubFinderCtrl', function ($scope,$http,$ionicPlatform, ClubFinderFactory,ReminderFactory) {
     $scope.toggleGroup = function(group) {
         if ($scope.isGroupShown(group)) {
             $scope.shownGroup = null;
@@ -10,182 +10,178 @@ angular.module('starter.controllers', [])
             $scope.shownGroup = group;
         }
     };
-
     $scope.isGroupShown = function(group) {
         return $scope.shownGroup === group;
     };
-    $ionicPlatform.ready(function() {
-        var isOffline = $cordovaNetwork.isOffline()
-        console.log("isOffline: ",isOffline);
-    });
-    loadClubs($scope, $http,$cordovaSQLite,sharingService,localStorage,$cordovaNetwork,$ionicPopup);
+    console.log("Gettting all Reminders 101 ************************");
+    try{
+        ClubFinderFactory.loadAllClubs($scope);
+         $ionicPlatform.ready(function() {
+        console.log("Gettting all Reminders************************");
+        console.log(JSON.stringify(ReminderFactory.getAllReminders()));
+         });
+    }catch(e){
+        console.error(e);
+    }
+    
 })
 
-
-.controller('ClubCtrl', function ($scope, $http, $state,$ionicModal,$ionicLoading,$cordovaSQLite,sharingService,localStorage) {
-    $scope.days = loadCalendarDays();
-     $scope.toggleGroup = function(group) {
-    if ($scope.isGroupShown(group)) {
-      $scope.shownGroup = null;
-    } else {
-      $scope.shownGroup = group;
-    }
-  };
-  $scope.isGroupShown = function(group) {
-    return $scope.shownGroup === group;
-  };
-  
-   $scope.showClasses = function(clubId) {
+.controller('ClubCtrl', function ($scope,$state, ClassFinder,sharingService) {
     
-  };
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
-  $scope.getDetails = function(item){
-      sharingService.getDataStore().currentClass = item;
-      console.log(sharingService.getDataStore().currentClass);
-      $state.go("app.class");
-  }
+    var clubId = $state.params.clubId;
+    
+    // Set Scope Data.
+    $scope.days = loadCalendarDays();
     $scope.clubName = $state.params.clubName;
-    loadClasses($scope, $http, $state.params.clubId,[{id:$state.params.clubId}],null,null,$ionicLoading,$cordovaSQLite,sharingService,localStorage);
     $scope.CurrentDay  = 0;
+    //Load Classes
+    ClassFinder.loadClasses($scope,  clubId,[{id:clubId}],null,null);
+    
+    // Controller function definitions
+ 
+    $scope.getDetails = function(item){
+        sharingService.getDataStore().currentClass = item;
+        console.log(sharingService.getDataStore().currentClass);
+        $state.go("app.class");
+    }
+    
     $scope.refreshClasses = function(dayId,dayName) {
         $scope.CurrentDay = dayId;
-        
-         loadClasses($scope, $http, $state.params.clubId,[{id:$state.params.clubId}],dayName,null,$ionicLoading,$cordovaSQLite,sharingService,localStorage)
+        ClassFinder.loadClasses($scope,clubId ,[{id:clubId}],dayName,null);
     };
 })
-.controller('ClassCtrl', function ($scope, $http, $state,$ionicPopover,$cordovaSocialSharing, $cordovaLocalNotification,$ionicPopup,$ionicScrollDelegate,sharingService,PtrService,localStorage) {
-    console.log("Class");
-    
+
+.controller('ClassCtrl', function ($scope,ClassFinder,sharingService ,$ionicPopup,$ionicScrollDelegate) {
     $scope.currentClass = sharingService.getDataStore().currentClass;
     $scope.hamada = $scope.currentClass.title;
-    console.log( $scope.currentClass);
-    loadOtherTiming($scope,$http,$scope.currentClass.clubId,$scope.currentClass.classTypeTag,localStorage);
+    $scope.choice = {};
+    $scope.choice.weekly = false;
+    
+    var popupTemplate = '<div class="list"> <ion-list> <ion-radio ng-model="choice.val" value="A">30 Minutes Before</ion-radio> <ion-radio ng-model="choice.val" value="B">1 Hour Before</ion-radio>'+
+                '<ion-radio ng-model="choice.val" value="C">2 Hours Before</ion-radio> <ion-checkbox ng-model="choice.weekly">Weekly Repeate</ion-checkbox>'+
+                '</ion-list>';
+                
     $scope.whatsappShare = function (){
-        $cordovaSocialSharing.shareViaWhatsApp("I'm attending Class: "+ $scope.currentClass.title +"at "+ $scope.currentClass.timeText, null, null)
-        .then(function(result) {
-        console.log("success"+result);
-        }, function(err) {
-        // An error occurred. Show a message to the user
-            console.log("err"+err);
-        });
+       ClassFinder.shareViaWhatsApp($scope.currentClass)
     };
     $scope.facebookShare = function (){
-        $cordovaSocialSharing.shareViaFacebook("I'm attending Class: "+ $scope.currentClass.title +"at "+ $scope.currentClass.timeText, null, "http://fitnessfirstme.com")
-        .then(function(result) {
-        console.log("success"+result);
-        }, function(err) {
-        // An error occurred. Show a message to the user
-            console.log("err"+err);
-        });
+       ClassFinder.shareViaFacebook($scope.currentClass)
     };
      $scope.twitterShare = function (){
-        $cordovaSocialSharing.shareViaTwitter("I'm attending Class: "+ $scope.currentClass.title +"at "+ $scope.currentClass.timeText, null, null)
-        .then(function(result) {
-        console.log("success"+result);
-        }, function(err) {
-        // An error occurred. Show a message to the user
-            console.log("err"+err);
-        });
+       ClassFinder.shareViaTwitter($scope.currentClass)
     };
-    $scope.remindMe = function ($event) {
-		// $scope.popover.show($event);
-        $scope.choice = {};
-        $scope.choice.weekly = false;
-        var myPopup = $ionicPopup.show({
-    template: '<div class="list"> <ion-list> <ion-radio ng-model="choice.val" value="A">30 Minutes Before</ion-radio> <ion-radio ng-model="choice.val" value="B">1 Hour Before</ion-radio>'+
-            '<ion-radio ng-model="choice.val" value="C">2 Hours Before</ion-radio> <ion-checkbox ng-model="choice.weekly">Weekly Repeate</ion-checkbox>'+
-        '</ion-list>',
-    title: 'Settings',
-    // subTitle: 'Repea',
-    scope: $scope,
-    buttons: [
-      { text: 'Cancel' },
-      {
-        text: '<b>Create</b>',
-        type: 'button-positive',
-        onTap: function(e) {
-          console.log($scope.choice);
-          console.log(e);
-           remindMe($scope, sharingService, $cordovaLocalNotification,  $scope.currentClass, $ionicPopup);
-        }
-      }
-    ]
-  });
-
-  myPopup.then(function(res) {
-    console.log('Tapped!', res);
-  });
-	}
-     $scope.getDetails = function(item){
-         console.log("Getting Deatils.");
-        // $window.location.reload(true)
-      sharingService.getDataStore().currentClass = item;
+    
+    $scope.getDetails = function(item){
+        console.log("Getting Deatils.");
+        sharingService.getDataStore().currentClass = item;
         $scope.currentClass = item;
-         $ionicScrollDelegate.scrollTop();
-         
-  };
+        $ionicScrollDelegate.scrollTop();
+    };
+    
+    function setReminder(e){
+        console.log($scope.choice);
+        console.log(e);
+        ClassFinder.doCreateAlarm($scope, $scope.currentClass);
+    }
+    
+    $scope.remindMe = function ($event) {
+        var myPopup = $ionicPopup.show({
+            template: popupTemplate,
+            title: 'Settings',
+            scope: $scope,
+            buttons: [
+                { text: 'Cancel' },
+                {
+                    text: '<b>Create</b>',type: 'button-positive',
+                    onTap: setReminder
+                }
+            ]
+        });
+        myPopup.then(function(res) {
+            console.log('Tapped!', res);
+        });
+    }
+    /*
+        FUNCTION CALLS
+    */
+    ClassFinder.loadOtherTiming($scope,$scope.currentClass.clubId,$scope.currentClass.classTypeTag);
 })
-.controller('ClassFinderCtrl', function ($scope, $http, $state,$ionicModal,$cordovaSocialSharing,$cordovaSQLite,$ionicLoading,sharingService,localStorage) {
-    console.log("Details");
-     
+
+.controller('ClassFinderCtrl', function ($scope,$state,$ionicLoading,sharingService,ClubFinderFactory) {
     $scope.emirates = emirates;
     $scope.days = loadCalendarDays();
-    
-    // $scope.currentEmirate = emirates[0];
     $scope.currentEmirate =  sharingService.getDataStore().currentEmirate;
-    console.log(sharingService.getDataStore().currentEmirate);
     $scope.CurrentDay = 0;
-    showLoading($ionicLoading);
-   getEmirateClubs($scope, $http, emirates[0],null,$ionicLoading,$cordovaSQLite,sharingService,localStorage);
+    /*
+        FUNCTION DEFINITION
+    */
     $scope.getDetails = function(item){
-      sharingService.getDataStore().currentClass = item;
-      console.log(sharingService.getDataStore().currentClass);
-      $state.go("app.class");
-  }
-  $scope.toggleGroup = function(group) {
-    if ($scope.isGroupShown(group)) {
-      $scope.shownGroup = null;
-    } else {
-      $scope.shownGroup = group;
+        sharingService.getDataStore().currentClass = item;
+        console.log(sharingService.getDataStore().currentClass);
+        $state.go("app.class");
     }
-  };
-  $scope.isGroupShown = function(group) {
-    return $scope.shownGroup === group;
-  };
-  
-   $scope.showClasses = function(clubId) {
-    
-  };
- $scope.refreshClassesByDay = function(dayId,dayName) {
-    
+    $scope.toggleGroup = function(group) {
+        if ($scope.isGroupShown(group)) {
+            $scope.shownGroup = null;
+        } else {
+            $scope.shownGroup = group;
+        }
+    };
+    $scope.isGroupShown = function(group) {
+        return $scope.shownGroup === group;
+    };
+
+    $scope.refreshClassesByDay = function(dayId,dayName) {
         $scope.CurrentDay = dayId;
         showLoading($ionicLoading);
+        ClubFinderFactory.getEmirateClubs($scope,$scope.currentEmirate,dayName);
+    };
+    $scope.refreshClassesByRegion = function(region) {
+        $scope.currentEmirate = region;
+        showLoading($ionicLoading);
+        getEmirateClubs($scope, $scope.currentEmirate,loadCalendarDays()[$scope.CurrentDay].name);
+    };
+    /*
+        FUNCTION CALLS
+    */
+    showLoading($ionicLoading);
+    ClubFinderFactory.getEmirateClubs($scope,emirates[0],null);
+})
+
+.controller('SettingsCtrl', function ($scope,ReminderFactory) {
+    $scope.showReminders = function(){
+        console.log("Reminders 2..");
+        ReminderFactory.getAllReminders();
+        console.log(JSON.stringify(ReminderFactory.getAllReminders()));
+    }
+})
+.controller('RemindersCtrl', function ($scope,ReminderFactory) {
+    
+    $scope.shouldShowDelete = false;
+    $scope.toggleDelete = function (){
+         $scope.shouldShowDelete = ! $scope.shouldShowDelete;
+    }
+    $scope.$on('$ionicView.beforeEnter', function(){ //This is fired twice in a row
+        console.log("App view Reminder entered.");
+        ReminderFactory.getAllReminders().then(function (result){
         
-         getEmirateClubs($scope, $http, $scope.currentEmirate,dayName,$ionicLoading,null,null,localStorage);
-    };
-     $scope.refreshClassesByRegion = function(region) {
-       $scope.currentEmirate = region;
-       showLoading($ionicLoading);
-        getEmirateClubs($scope, $http, $scope.currentEmirate,loadCalendarDays()[$scope.CurrentDay].name,$ionicLoading,null,null,localStorage);
-    };
+        console.log(result);
+        try{
+        for(var i=0;i<result.length;++i){
+            result[i].data = JSON.parse(result[i].data);
+        }
+        }catch(err){
+            console.error(err);
+        }
+        $scope.notifications = result;
+    });
+    });
+    // $scope.notifications = [];
+    //  $scope.notifications.push({title:'dummy',data:{title:'dummy title',timetext:'dummy time'}});
 })
-.controller('SettingsCtrl', function ($scope, $http, $state,$ionicModal,$cordovaSocialSharing,$cordovaSQLite,$ionicLoading,sharingService,localStorage) {
-})
-.controller('CacheCtrl', function ($scope, $http, $state,$ionicModal,$cordovaSocialSharing,$cordovaSQLite,$ionicLoading,sharingService,localStorage) {
+
+.controller('CacheCtrl', function ($scope, localStorage) {
+    
     $scope.$on( "$ionicView.beforeEnter", function( scopes, states ) {
         console.log("onEnter",localStorage.cacheEnabled());
         $scope.enableCache = {value:localStorage.cacheEnabled()};
