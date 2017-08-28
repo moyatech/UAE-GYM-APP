@@ -1,9 +1,12 @@
+// module.run(function($http) {
+//   $http.defaults.headers.common.Authorization = 'Basic YmVlcDpib29w';
+// });
 angular.module('starter.services')
 .factory('ClassFinder', ['$http','localStorage','$cordovaNetwork',
     '$ionicPopup','sharingService','$ionicLoading','$cordovaSocialSharing','$cordovaLocalNotification'
     ,function ( $http,localStorage,$cordovaNetwork,$ionicPopup,sharingService,
     $ionicLoading,$cordovaSocialSharing,$cordovaLocalNotification) {
-        var apiUrl = "http://www.fitnessfirstme.com/en-GB/uae/classes/timetable/ClassTimes";
+        var apiUrl = "http://uae.fitnessfirstme.com/classes/timetable/ClassTimes.json";
         
         function loadClassTimesFromApi($scope,data,club,clazz){
             getClassTimes(data.morning, $scope.times,null,club,clazz);
@@ -92,7 +95,9 @@ angular.module('starter.services')
                 console.log("Loading classes");
                 if(!isCached(clubArr,localStorage)){
                     var myurl = apiUrl;
-                    $http({method: 'POST',url: myurl,data:{'clubs':club}})
+                    $http({method: 'POST',url: myurl,headers: {
+   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+ },data:{'clubs':club}})
                         .success(function (data, status) {
                             $scope.classes = [];
                             if(data != null && data != undefined){
@@ -109,7 +114,9 @@ angular.module('starter.services')
                 if(localStorage.classes(club).length == 0){
                     var myurl = apiUrl;
                     $http({
-                        method: 'POST',
+                        method: 'POST',headers: {
+   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+ },
                         url: myurl,data:{'clubs':club,'classes':clazz}}).success(function (data, status) {
                         if(data != null && data != undefined){
                             loadClassTimesFromApi($scope,data);
@@ -125,7 +132,9 @@ angular.module('starter.services')
                 var obj = {};
                 var myurl = apiUrl;
                 $http({
-                    method: 'POST',
+                    method: 'POST',headers: {
+   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+ },
                     url: myurl,data:{'clubs':clubStr}}).success(function (data, status) {
                     $scope.classes = [];
                     if(data != null && data != undefined){

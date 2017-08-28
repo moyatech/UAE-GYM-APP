@@ -1,0 +1,9 @@
+<ion-view view-title="Startup Screen">
+    <ion-content>
+        <ion-list>
+            <ion-radio ng-model="choice" ng-value="'location'">Nearst Club</ion-radio>
+            <ion-radio ng-model="choice" ng-value="'favorite'" ng-change="moveToPage()">Choose Club</ion-radio>
+            <ion-radio ng-model="choice" ng-value="'list'" ng-change="saveChoice('list')">Club List</ion-radio>
+        </ion-list>
+    </ion-content>
+</ion-view>

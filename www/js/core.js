@@ -7,7 +7,7 @@
 })();
 var country = "uae";
 var lang = "en-GB"
-var baseUrl = "http://www.fitnessfirstme.com/"+lang+"/"+country+"/";
+var baseUrl = "http://uae.fitnessfirstme.com/";
 
 var __debug = false;
 

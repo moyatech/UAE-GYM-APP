@@ -3,7 +3,9 @@ angular.module('starter.services')
     '$ionicPopup','$ionicLoading','sharingService','ClassFinder'
     ,function ( $http,localStorage,$cordovaNetwork,$ionicPopup,$ionicLoading,sharingService,ClassFinder) {
         // var ClassFinder = {};
-        var clubsApiUrl = baseUrl+"classes/timetable/Clubs/";
+        var clubsApiUrl = baseUrl+"classes/timetable/Clubs.json";
+        
+        
         var __debug = true;
         function loadClubsFromApi($scope,data){       
             console.log("loadig classes");

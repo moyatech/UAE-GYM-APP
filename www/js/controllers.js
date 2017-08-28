@@ -154,6 +154,7 @@ angular.module('starter.controllers', [])
         ReminderFactory.getAllReminders();
         console.log(JSON.stringify(ReminderFactory.getAllReminders()));
     }
+   
 })
 .controller('RemindersCtrl', function ($scope,ReminderFactory) {
     
@@ -180,8 +181,9 @@ angular.module('starter.controllers', [])
     //  $scope.notifications.push({title:'dummy',data:{title:'dummy title',timetext:'dummy time'}});
 })
 
-.controller('CacheCtrl', function ($scope, localStorage) {
-    
+.controller('CacheCtrl', function ($scope, $state,ClubFinderFactory, localStorage) {
+     ClubFinderFactory.loadAllClubs($scope);
+     $scope.choice = localStorage.startupScreen  ;
     $scope.$on( "$ionicView.beforeEnter", function( scopes, states ) {
         console.log("onEnter",localStorage.cacheEnabled());
         $scope.enableCache = {value:localStorage.cacheEnabled()};
@@ -198,5 +200,14 @@ angular.module('starter.controllers', [])
     $scope.resetCache = function(){
         localStorage.reset();
         console.log("onReset",localStorage.cacheEnabled());
+    }
+    $scope.moveToPage = function (){
+        localStorage.startupScreen = $scope.choice;
+        $scope.choice  = 'favorite';
+        $state.go("app.startup-club"); 
+    }
+    $scope.saveChoice = function (choice){
+        localStorage.startupScreen = choice;
+
     }
 });

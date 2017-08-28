@@ -16,7 +16,7 @@
          <ion-item ng-repeat='item in classes'
 					  class="item-thumbnail-left item-icon-right item-text-wrap" 
                       ng-click="getDetails(item)">
-				<img ng-src="http://www.fitnessfirstme.com/{{item.popupHeaderImage}}"
+				<img ng-src="{{item.popupHeaderImage}}"
 					 alt="{{item.title}}" class="no-size">
 				<h2>{{item.title}}</h2>
 				<h3>Studio: {{item.studio}}</h3>

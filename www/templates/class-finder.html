@@ -34,7 +34,7 @@
                     ng-repeat="item in group.classes"
                     ng-show="isGroupShown(group.name)"
                     ng-click="getDetails(item)">
-            <img ng-src="http://www.fitnessfirstme.com/{{item.popupHeaderImage}}"
+            <img ng-src="{{item.popupHeaderImage}}"
 					 alt="{{item.title}}" class="no-size">
 				<h2>{{item.clubName}}</h2>
                 <h4>Studio: {{item.studio}}</h4>

@@ -85,6 +85,24 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.services','ng
         }
        }
     })
+    .state('app.startup', {
+      url: '/startup',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/startup.html',
+          controller: 'CacheCtrl'
+        }
+       }
+    })
+    .state('app.startup-club', {
+      url: '/startup-club',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/startup-club.html',
+          controller: 'CacheCtrl'
+        }
+       }
+    })
     .state('app.reminders', {
       url: '/reminders',
       views: {

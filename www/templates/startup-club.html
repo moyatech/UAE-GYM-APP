@@ -1,0 +1,14 @@
+<ion-view view-title="Choose club">
+    <ion-content>
+   
+   
+        
+         <div ng-repeat="city in cities">
+         <div class="item item-divider">
+            {{city.name}}
+        </div>
+           <ion-radio ng-repeat="item in city.clubs" ng-model="choice" ng-value="item">{{item.name}}</ion-radio>  
+         </div>
+         
+    </ion-content>
+</ion-view>

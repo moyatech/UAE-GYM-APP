@@ -8,6 +8,7 @@ angular.module('starter.services', [])
     var loaded = false;
     var lastRefresh = window.localStorage['lastRefresh'];
     var clubs = window.localStorage['clubs'];
+    var startupScreen = 'favorite';
     if(!getCacheEnabled())
         reset();
     loadAll();
@@ -115,7 +116,8 @@ angular.module('starter.services', [])
         setClubs:setClubs,
         setCacheEnabled:setCacheEnabled,
         refresh:refresh,
-        reset:reset
+        reset:reset,
+        startupScreen:startupScreen
     } 
 }])
 ///	Sharing service is used to share date between diffrent controllers in the application. There is a datastore, where anything can be 
